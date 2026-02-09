@@ -1,6 +1,8 @@
-﻿using FreshdeskIntegrationHub.Models;
+﻿using FreshdeskIntegrationHub.Domain.Entities;
+using FreshdeskIntegrationHub.Dto;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 
 namespace FreshdeskIntegrationHub.Services;
@@ -31,19 +33,43 @@ namespace FreshdeskIntegrationHub.Services;
             return await response.Content.ReadAsStringAsync();
         }
 
-    // Parsed ticket list for sync service
-    public async Task<List<Ticket>> GetTicketsAsync()
-    {
-        var response = await _httpClient.GetAsync("/api/v2/tickets");
-        response.EnsureSuccessStatusCode();
-
-        var json = await response.Content.ReadAsStringAsync();
-
-        return JsonSerializer.Deserialize<List<Ticket>>(json, new JsonSerializerOptions
+        // Parsed ticket list for sync service
+        public async Task<List<Ticket>> GetTicketsAsync()
         {
-            PropertyNameCaseInsensitive = true
-        }) ?? new List<Ticket>();
-    }
+            var response = await _httpClient.GetAsync("/api/v2/tickets");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<List<Ticket>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }) ?? new List<Ticket>();
+        }
+
+
+
+        public async Task<Ticket?> CreateTicketAsync(CreateTicketRequest request)
+        {
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("/api/v2/tickets", content);
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Freshdesk error {response.StatusCode}: {errorBody}");
+        }
+
+
+        var responseJson = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<Ticket>(responseJson, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+        }
+
 
 
 }

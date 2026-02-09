@@ -1,4 +1,4 @@
-﻿using FreshdeskIntegrationHub.Models;
+﻿using FreshdeskIntegrationHub.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Sockets;
 

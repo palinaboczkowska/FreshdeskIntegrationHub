@@ -1,4 +1,4 @@
-﻿namespace FreshdeskIntegrationHub.Models;
+﻿namespace FreshdeskIntegrationHub.Domain.Entities;
 
 public class SyncState
 {
