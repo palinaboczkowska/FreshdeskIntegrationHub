@@ -35,6 +35,13 @@ namespace FreshdeskIntegrationHub.Controllers;
             var ticket = await _client.GetTicketByIdAsync(id);
             return Ok(ticket);
         }
+
+        [HttpPost("tickets/{id}/notes")]
+        public async Task<IActionResult> AddNote(long id, [FromBody] AddNoteRequest request)
+        {
+            await _client.AddNoteAsync(id, request);
+            return Ok(new { message = "Note added successfully" });
+        }
 }
 
 

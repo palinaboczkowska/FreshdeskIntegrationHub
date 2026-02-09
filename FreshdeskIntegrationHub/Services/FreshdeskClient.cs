@@ -87,4 +87,18 @@ namespace FreshdeskIntegrationHub.Services;
             });
         }
 
+        public async Task AddNoteAsync(long ticketId, AddNoteRequest request)
+        {
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"/api/v2/tickets/{ticketId}/notes", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Freshdesk error {response.StatusCode}: {errorBody}");
+            }
+        }
+
 }
