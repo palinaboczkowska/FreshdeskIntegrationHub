@@ -48,7 +48,6 @@ namespace FreshdeskIntegrationHub.Services;
         }
 
 
-
         public async Task<Ticket?> CreateTicketAsync(CreateTicketRequest request)
         {
             var json = JsonSerializer.Serialize(request);
@@ -70,6 +69,22 @@ namespace FreshdeskIntegrationHub.Services;
             });
         }
 
+        public async Task<Ticket?> GetTicketByIdAsync(long id)
+        {
+            var response = await _httpClient.GetAsync($"/api/v2/tickets/{id}");
 
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Freshdesk error {response.StatusCode}: {errorBody}");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<Ticket>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+        }
 
 }

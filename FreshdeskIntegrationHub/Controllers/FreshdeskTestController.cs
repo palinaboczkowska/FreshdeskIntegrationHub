@@ -28,6 +28,13 @@ namespace FreshdeskIntegrationHub.Controllers;
             var ticket = await _client.CreateTicketAsync(request);
             return Ok(ticket);
         }
+
+        [HttpGet("tickets/{id}")]
+        public async Task<IActionResult> GetTicketById(long id)
+        {
+            var ticket = await _client.GetTicketByIdAsync(id);
+            return Ok(ticket);
+        }
 }
 
 
