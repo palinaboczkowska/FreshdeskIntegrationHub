@@ -32,17 +32,18 @@ namespace FreshdeskIntegrationHub.Services;
         }
 
     // Parsed ticket list for sync service
-        public async Task<List<Ticket>> GetTicketsAsync()
+    public async Task<List<Ticket>> GetTicketsAsync()
+    {
+        var response = await _httpClient.GetAsync("/api/v2/tickets");
+        response.EnsureSuccessStatusCode();
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        return JsonSerializer.Deserialize<List<Ticket>>(json, new JsonSerializerOptions
         {
-            var json = await GetTicketsRawAsync();
+            PropertyNameCaseInsensitive = true
+        }) ?? new List<Ticket>();
+    }
 
-            // Deserialize Freshdesk tickets
-            var tickets = JsonSerializer.Deserialize<List<Ticket>>(json, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            return tickets ?? new List<Ticket>();
-        }
 
 }

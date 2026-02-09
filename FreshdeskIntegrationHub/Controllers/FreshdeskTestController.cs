@@ -17,9 +17,10 @@ namespace FreshdeskIntegrationHub.Controllers
         [HttpGet("tickets")]
         public async Task<IActionResult> GetTickets()
         {
-            var json = await _client.GetTicketsRawAsync();
-            return Content(json, "application/json");
+            var tickets = await _client.GetTicketsAsync();
+            return Ok(tickets);
         }
+
     }
 
 }
