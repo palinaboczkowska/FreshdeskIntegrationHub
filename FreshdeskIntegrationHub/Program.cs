@@ -15,6 +15,7 @@ builder.Services.AddHttpClient<FreshdeskClient>();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHostedService<FreshdeskSyncService>();
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
