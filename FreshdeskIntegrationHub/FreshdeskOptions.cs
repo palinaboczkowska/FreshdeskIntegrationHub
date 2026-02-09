@@ -4,6 +4,9 @@
     {
         public string Domain { get; set; } = string.Empty;
         public string ApiKey { get; set; } = string.Empty;
-        public int PollingIntervalSeconds { get; set; } = 60;
+
+        // Sync interval in seconds
+        public int SyncIntervalSeconds { get; set; } = 30;
+
     }
 }

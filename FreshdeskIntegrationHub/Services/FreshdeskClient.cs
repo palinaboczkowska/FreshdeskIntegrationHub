@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using FreshdeskIntegrationHub.Models;
+using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace FreshdeskIntegrationHub.Services;
     public class FreshdeskClient
@@ -28,4 +30,20 @@ namespace FreshdeskIntegrationHub.Services;
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
         }
+
+    // Parsed ticket list for sync service
+    public async Task<List<Ticket>> GetTicketsAsync()
+    {
+        var response = await _httpClient.GetAsync("/api/v2/tickets");
+        response.EnsureSuccessStatusCode();
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        return JsonSerializer.Deserialize<List<Ticket>>(json, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        }) ?? new List<Ticket>();
     }
+
+
+}
