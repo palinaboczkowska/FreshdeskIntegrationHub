@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FreshdeskIntegrationHub.Models;
+namespace FreshdeskIntegrationHub.Domain.Entities;
 
 public class Ticket
 {

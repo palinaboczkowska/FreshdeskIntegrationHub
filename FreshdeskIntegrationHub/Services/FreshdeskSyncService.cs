@@ -1,7 +1,7 @@
 ﻿using FreshdeskIntegrationHub.Data;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using FreshdeskIntegrationHub.Models;
+using FreshdeskIntegrationHub.Domain.Entities;
 
 
 namespace FreshdeskIntegrationHub.Services;
