@@ -6,32 +6,33 @@ using System.Text;
 using System.Text.Json;
 
 namespace FreshdeskIntegrationHub.Services;
-    public class FreshdeskClient
+
+public class FreshdeskClient
+{
+    private readonly HttpClient _httpClient;
+    private readonly FreshdeskOptions _options;
+
+    public FreshdeskClient(HttpClient httpClient, IOptions<FreshdeskOptions> options)
     {
-        private readonly HttpClient _httpClient;
-        private readonly FreshdeskOptions _options;
+        _httpClient = httpClient;
+        _options = options.Value;
 
-        public FreshdeskClient(HttpClient httpClient, IOptions<FreshdeskOptions> options)
-        {
-            _httpClient = httpClient;
-            _options = options.Value;
+        _httpClient.BaseAddress = new Uri($"https://{_options.Domain}/");
 
-            _httpClient.BaseAddress = new Uri($"https://{_options.Domain}/");
+        var auth = Convert.ToBase64String(
+            System.Text.Encoding.ASCII.GetBytes($"{_options.ApiKey}:X")
+        );
 
-            var auth = Convert.ToBase64String(
-                System.Text.Encoding.ASCII.GetBytes($"{_options.ApiKey}:X")
-            );
+        _httpClient.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Basic", auth);
+    }
 
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Basic", auth);
-        }
-
-        public async Task<string> GetTicketsRawAsync()
-        {
-            var response = await _httpClient.GetAsync("/api/v2/tickets");
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
-        }
+    public async Task<string> GetTicketsRawAsync()
+    {
+        var response = await _httpClient.GetAsync("/api/v2/tickets");
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStringAsync();
+    }
 
     // Parsed ticket list for sync service
     //public async Task<List<Ticket>> GetTicketsAsync()
