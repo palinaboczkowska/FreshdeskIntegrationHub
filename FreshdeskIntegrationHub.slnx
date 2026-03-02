@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="FreshdeskIntegrationHub.Tests/FreshdeskIntegrationHub.Tests.csproj" Id="430fc996-fdbb-4aa2-8680-abdf7ce334a1" />
   <Project Path="FreshdeskIntegrationHub/FreshdeskIntegrationHub.csproj" />
 </Solution>
